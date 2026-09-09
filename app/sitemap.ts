@@ -1,0 +1,35 @@
+import type { MetadataRoute } from "next";
+import { SITE } from "@/data/site";
+import { ALL_PRODUCTS } from "@/data/solutions";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
+  const pages = [
+    "",
+    "/about",
+    "/hardware",
+    "/partners",
+    "/contact",
+    "/request-demo",
+    "/news-events",
+    "/clients",
+    "/careers",
+    "/team",
+    "/downloads",
+  ];
+
+  return [
+    ...pages.map((path) => ({
+      url: `${SITE.url}${path}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: path === "" ? 1 : 0.7,
+    })),
+    ...ALL_PRODUCTS.map(({ category, product }) => ({
+      url: `${SITE.url}/solutions/${category.slug}/${product.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+  ];
+}

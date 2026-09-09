@@ -1,0 +1,840 @@
+@import "tailwindcss";
+
+/* ============================================================
+   RASTER IMAGES — DESIGN TOKENS
+   Premium dark healthcare technology system.
+   Accent: Paolo Veronese Green #00A87B
+   ============================================================ */
+
+@theme {
+  /* Color system */
+  --color-bg: #050807;
+  --color-bg-2: #080d0b;
+  --color-bg-3: #0b1210;
+  --color-ink: #edf3f1;
+  --color-mist: #9fb0a9;
+  --color-faint: #71817a;
+  --color-brand: #00a87b;
+  --color-brand-bright: #14cf9c;
+  --color-brand-soft: #7fe6c8;
+  --color-brand-ink: #031510;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-soft: rgba(255, 255, 255, 0.05);
+  --color-line-brand: rgba(0, 168, 123, 0.28);
+  --color-danger: #f2727d;
+
+  /* Accent spectrum — per-icon identity colours. Tuned to sit at a similar
+     luminance on the charcoal-green base so a grid of mixed accents reads as
+     one family rather than a rainbow. Brand emerald remains primary; these
+     are for icon badges only, never for type, buttons or borders at large. */
+  --color-accent-teal: #14cf9c;
+  --color-accent-cyan: #22c8dd;
+  --color-accent-sky: #4aa3f7;
+  --color-accent-indigo: #8494f5;
+  --color-accent-violet: #b07df0;
+  --color-accent-rose: #f4788f;
+  --color-accent-amber: #f0a94a;
+  --color-accent-lime: #96d94f;
+
+  /* Typography */
+  --font-sans: var(--font-bai), "Bai Jamjuree", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+
+  /* Card system */
+  --radius-card: 1.125rem;
+  --blur-card: 16px;
+
+  /* Shadows — drop shadow + top inner highlight + faint green inner glow */
+  --shadow-glass: 0 24px 60px -24px rgba(0, 0, 0, 0.65),
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 0 34px 0 rgba(0, 168, 123, 0.05) inset;
+  --shadow-glow: 0 0 0 1px rgba(0, 168, 123, 0.22),
+    0 12px 48px -12px rgba(0, 168, 123, 0.28);
+  --shadow-cta: 0 8px 28px -8px rgba(0, 168, 123, 0.55);
+
+  /* Motion */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Breakpoints (defaults kept; xs added for small phones) */
+  --breakpoint-xs: 26rem;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Owns the leftover column height so the footer sits at the bottom of short
+   pages. Paired with the flex body above. */
+main {
+  flex: 1 0 auto;
+  /* Own formatting context: keeps descendant margins from escaping into the
+     page box the way the footer's used to. */
+  display: flow-root;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+  min-height: 100dvh;
+  /* Column flex rather than block flow. Streaming SSR paints <main> before its
+     content arrives, and an empty <main> lets the footer's top margin collapse
+     through it and out of <body> — the whole page renders 32px low, then snaps
+     up when the content lands. Flex containers never margin-collapse, so the
+     footer stays put. `main { flex: 1 }` below also keeps the footer at the
+     bottom on short pages instead of riding up mid-viewport. */
+  display: flex;
+  flex-direction: column;
+  /* Sitewide ambient gradient — clearly visible emerald blooms over a
+     charcoal-green base: top-right, mid-left, and rising from below the
+     fold. Viewport-anchored so every page shares the same ground. */
+  /* Dense mesh of moderate glow nodes — same overall brightness as before,
+     but distributed so every region of the viewport carries gradient */
+  background-image: radial-gradient(
+      900px 620px at 80% -8%,
+      rgba(0, 168, 123, 0.24),
+      transparent 62%
+    ),
+    radial-gradient(
+      700px 480px at 12% -10%,
+      rgba(0, 168, 123, 0.13),
+      transparent 60%
+    ),
+    radial-gradient(
+      800px 560px at -10% 34%,
+      rgba(0, 168, 123, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      760px 540px at 108% 42%,
+      rgba(0, 168, 123, 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 620px at 38% 56%,
+      rgba(0, 168, 123, 0.07),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 560px at 55% 112%,
+      rgba(0, 168, 123, 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      700px 500px at -6% 96%,
+      rgba(0, 168, 123, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 96% 106%,
+      rgba(0, 168, 123, 0.13),
+      transparent 60%
+    ),
+    linear-gradient(160deg, #0e1a15 0%, #081009 34%, #050807 60%, #0a1410 100%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(0, 168, 123, 0.35);
+  color: #f4fffb;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #060a09;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 168, 123, 0.28);
+  border-radius: 6px;
+  border: 2px solid #060a09;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 168, 123, 0.5);
+}
+
+/* Keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Iframes / media never overflow */
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* ============================================================
+   COMPONENT LAYER
+   ============================================================ */
+
+@layer components {
+  /* ── Glossy primary button ──────────────────────────────────────
+     Layered like a lit glass pill, bottom to top:
+       1. vertical body gradient (bright at the crown, deep at the base)
+       2. a specular sweep across the upper half   (::before)
+       3. a hairline bright top rim + shaded bottom rim (inset shadows)
+       4. an ambient brand glow beneath              (outer shadow)
+     `isolation: isolate` makes the button its own stacking context, so the
+     z-index:-1 sweep paints above the gradient but below the label — no
+     wrapper span needed around the text. */
+  .btn-glossy {
+    position: relative;
+    isolation: isolate;
+    background-image: linear-gradient(
+      180deg,
+      var(--color-brand-bright) 0%,
+      var(--color-brand) 54%,
+      #01926b 100%
+    );
+    box-shadow:
+      inset 0 0 0 1px rgba(1, 90, 66, 0.55),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.22),
+      0 8px 28px -8px rgba(0, 168, 123, 0.6);
+  }
+
+  /* The dome. Inset from the rim so a band of bare glass reads as the pill's
+     edge, and given its own tighter radius so the highlight is a defined
+     shape with a crisp lower boundary — not a gradient bleeding to the edges,
+     which is what separates "glossy" from "just lighter at the top". */
+  .btn-glossy::before {
+    content: "";
+    position: absolute;
+    inset: 2px 3px auto 3px;
+    height: 46%;
+    z-index: -1;
+    border-radius: 999px 999px 60% 60% / 999px 999px 22px 22px;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(255, 255, 255, 0.4) 42%,
+      rgba(255, 255, 255, 0.1) 78%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 1;
+    transition: opacity 0.3s var(--ease-premium);
+  }
+
+  /* The rim. A bright ring inset one pixel in from the edge, so the very edge
+     stays dark and the ring reads as thickness of glass rather than a border. */
+  .btn-glossy::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-top-color: rgba(255, 255, 255, 0.72);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .btn-glossy:hover {
+    background-image: linear-gradient(
+      180deg,
+      #38e0b4 0%,
+      var(--color-brand-bright) 54%,
+      #00a07a 100%
+    );
+    box-shadow:
+      inset 0 0 0 1px rgba(1, 90, 66, 0.5),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+      0 12px 36px -8px rgba(0, 168, 123, 0.75);
+  }
+
+  /* Pressed: the light source is above, so a pressed pill loses its crown
+     highlight and gains shade — the inverse of the resting state. */
+  .btn-glossy:active {
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 4px 14px -8px rgba(0, 168, 123, 0.5);
+  }
+
+  .btn-glossy:active::before {
+    opacity: 0.4;
+  }
+
+  .btn-glossy:active::after {
+    border-top-color: rgba(255, 255, 255, 0.25);
+  }
+
+  /* ── Accent icon badge ──────────────────────────────────────────
+     One mechanism for every icon container on the site. Pair with an
+     `accent-*` class to set the hue and any `size-*`/`rounded-*` utilities
+     for the shape:
+         <span class="icon-badge accent-violet size-10 rounded-xl">
+     Inside a `.group`, hovering the parent intensifies the badge.        */
+  .icon-badge {
+    --accent: var(--color-accent-teal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklab, var(--accent) 32%, transparent);
+    background-color: color-mix(in oklab, var(--accent) 12%, transparent);
+    color: var(--accent);
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .group:hover .icon-badge {
+    border-color: color-mix(in oklab, var(--accent) 58%, transparent);
+    background-color: color-mix(in oklab, var(--accent) 19%, transparent);
+    box-shadow: 0 0 28px -10px color-mix(in oklab, var(--accent) 62%, transparent);
+  }
+
+  /* Standing glow, for badges that are prominent rather than in a grid. */
+  .icon-badge-glow {
+    box-shadow: 0 0 26px -10px color-mix(in oklab, var(--accent) 62%, transparent);
+  }
+
+  /* Bloom layer behind an animated badge (see ProductIcon). */
+  .icon-halo {
+    background-color: color-mix(in oklab, var(--accent) 32%, transparent);
+  }
+
+  .accent-teal {
+    --accent: var(--color-accent-teal);
+  }
+  .accent-cyan {
+    --accent: var(--color-accent-cyan);
+  }
+  .accent-sky {
+    --accent: var(--color-accent-sky);
+  }
+  .accent-indigo {
+    --accent: var(--color-accent-indigo);
+  }
+  .accent-violet {
+    --accent: var(--color-accent-violet);
+  }
+  .accent-rose {
+    --accent: var(--color-accent-rose);
+  }
+  .accent-amber {
+    --accent: var(--color-accent-amber);
+  }
+  .accent-lime {
+    --accent: var(--color-accent-lime);
+  }
+
+  /* Page gutter + width */
+  .container-site {
+    width: 100%;
+    max-width: 80rem; /* 1280px */
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-site {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Vertical rhythm */
+  .section {
+    padding-block: 3rem;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-block: 4.25rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .section {
+      padding-block: 5rem;
+    }
+  }
+
+  /* Glass surfaces — a soft light-to-green wash lifts cards off the
+     near-black page so they read as elevated panels, not holes. */
+  .glass {
+    position: relative;
+    background:
+      radial-gradient(
+        120% 90% at 18% 0%,
+        rgba(255, 255, 255, 0.055) 0%,
+        rgba(255, 255, 255, 0) 55%
+      ),
+      linear-gradient(
+        165deg,
+        rgba(255, 255, 255, 0.075) 0%,
+        rgba(255, 255, 255, 0.032) 45%,
+        rgba(0, 168, 123, 0.055) 100%
+      );
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(var(--blur-card));
+    -webkit-backdrop-filter: blur(var(--blur-card));
+    transition:
+      background-color 0.45s var(--ease-premium),
+      border-color 0.45s var(--ease-premium);
+  }
+
+  .glass-deep {
+    position: relative;
+    background:
+      radial-gradient(
+        120% 90% at 18% 0%,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0) 55%
+      ),
+      linear-gradient(
+        170deg,
+        rgba(20, 31, 27, 0.88) 0%,
+        rgba(10, 16, 14, 0.78) 55%,
+        rgba(8, 18, 15, 0.82) 100%
+      );
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(var(--blur-card));
+    -webkit-backdrop-filter: blur(var(--blur-card));
+    transition:
+      background-color 0.45s var(--ease-premium),
+      border-color 0.45s var(--ease-premium);
+  }
+
+  /* Uniform hover: a slight brightness lift on every glass surface
+     (background-color sits beneath the translucent gradient layers) */
+  @media (hover: hover) {
+    .glass:hover,
+    .glass-deep:hover {
+      background-color: rgba(255, 255, 255, 0.022);
+    }
+  }
+
+  /* Full-bleed glass band — the card glass treatment for edge-to-edge
+     strips (no radius, border on top/bottom only) */
+  .glass-band {
+    position: relative;
+    border-block: 1px solid var(--color-line);
+    background: radial-gradient(
+        760px 220px at 50% 0%,
+        rgba(0, 168, 123, 0.08),
+        transparent 70%
+      ),
+      linear-gradient(
+        165deg,
+        rgba(255, 255, 255, 0.075) 0%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(0, 168, 123, 0.06) 100%
+      );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      inset 0 0 44px rgba(0, 168, 123, 0.05),
+      0 18px 48px -22px rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Lighter inset panels for rows nested inside glass cards — same tint
+     family, no blur/shadow so hierarchy stays clear */
+  .glass-inset {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-line-soft);
+    border-radius: 0.75rem;
+  }
+
+  /* Interactive glass hover state */
+  .glass-hover {
+    transition:
+      border-color 0.45s var(--ease-premium),
+      box-shadow 0.45s var(--ease-premium),
+      transform 0.45s var(--ease-premium),
+      background-color 0.45s var(--ease-premium);
+  }
+  @media (hover: hover) {
+    .glass-hover:hover {
+      border-color: var(--color-line-brand);
+      box-shadow:
+        var(--shadow-glass),
+        0 0 42px -14px rgba(0, 168, 123, 0.4);
+      transform: translateY(-3px);
+    }
+  }
+
+  /* Card glow system — cursor coordinates (--bgx/--bgy) are set per card
+     by the BorderGlow delegated listener and drive two hover effects:
+     ::after paints a 1px border ring aligned over the card's own border
+     (mask-composite trick, survives overflow-hidden and any radius), and
+     ::before paints an interior spotlight wash at the cursor. isolation
+     keeps the spotlight above the card's background but under content. */
+  .border-glow {
+    position: relative;
+  }
+  .glass,
+  .glass-deep,
+  .border-glow {
+    isolation: isolate;
+  }
+  .glass::before,
+  .glass-deep::before,
+  .border-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      460px circle at var(--bgx, 50%) var(--bgy, 50%),
+      rgba(20, 207, 156, 0.11),
+      rgba(20, 207, 156, 0.045) 34%,
+      transparent 68%
+    );
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-premium);
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (hover: hover) {
+    .glass:hover::before,
+    .glass-deep:hover::before,
+    .border-glow:hover::before {
+      opacity: 1;
+    }
+  }
+  .glass::after,
+  .glass-deep::after,
+  .border-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      220px circle at var(--bgx, 50%) var(--bgy, 50%),
+      rgba(20, 207, 156, 0.8),
+      rgba(0, 168, 123, 0.28) 42%,
+      transparent 74%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-premium);
+    pointer-events: none;
+    z-index: 1;
+  }
+  @media (hover: hover) {
+    .glass:hover::after,
+    .glass-deep:hover::after,
+    .border-glow:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* Top light edge on glass (inset shadow so ::before stays free for the
+     spotlight; stacks with the base --shadow-glass inner highlight) */
+  .glass-edge {
+    box-shadow:
+      var(--shadow-glass),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Fine background grid */
+  .grid-lines {
+    background-image: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.028) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(
+      ellipse 90% 80% at 50% 30%,
+      black 30%,
+      transparent 78%
+    );
+  }
+
+  /* Type hierarchy — medium default, semibold for majors */
+  .display-hero {
+    font-size: 2.5rem;
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .display-section {
+    font-size: clamp(1.65rem, 1.1rem + 2.6vw, 2.85rem);
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+  }
+  .display-page {
+    font-size: clamp(1.9rem, 1.1rem + 3.6vw, 3.4rem);
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.014em;
+  }
+  .title-card {
+    font-size: 1.15rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-brand-bright);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.4rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-brand), transparent);
+  }
+  .lead {
+    font-size: clamp(1rem, 0.94rem + 0.35vw, 1.18rem);
+    line-height: 1.65;
+    color: var(--color-mist);
+    font-weight: 400;
+  }
+
+  /* Green text gradient for selective emphasis */
+  .text-brand-gradient {
+    background: linear-gradient(112deg, #eafff8 6%, #45dcb0 48%, #00a87b 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Hide scrollbars on horizontal snap rows */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Animated ECG pulse line (decorative) */
+  .ecg-path {
+    stroke-dasharray: 220 1400;
+    stroke-dashoffset: 0;
+    animation: ecg-flow 7.5s linear infinite;
+  }
+  @keyframes ecg-flow {
+    to {
+      stroke-dashoffset: -1620;
+    }
+  }
+
+  /* Hairline dividers */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1) 22%,
+      rgba(255, 255, 255, 0.1) 78%,
+      transparent
+    );
+  }
+}
+
+/* ============================================================
+   HERO — hologram stage (adapted from provided hero-section)
+   ============================================================ */
+
+.hologram-stage {
+  --spot: 170px;
+  --mx: 50%;
+  --my: 42%;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Re-tint provided cyan hologram assets to brand green */
+.hologram-tint {
+  filter: hue-rotate(-28deg) saturate(0.82) brightness(0.98);
+}
+
+.hologram-video,
+.hologram-base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.hologram-video {
+  opacity: 0;
+  transition: opacity 0.7s ease-in-out;
+}
+.hologram-video.is-active {
+  opacity: 1;
+}
+
+.hologram-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  mix-blend-mode: hard-light;
+  -webkit-mask-image: radial-gradient(
+    circle var(--spot) at var(--mx) var(--my),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.85) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--spot) at var(--mx) var(--my),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.85) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.hologram-stage:hover .hologram-reveal,
+.hologram-stage.is-touched .hologram-reveal {
+  opacity: 1;
+}
+.hologram-reveal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: contrast(1.08) saturate(1.15);
+  mix-blend-mode: screen;
+}
+
+.hologram-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.55;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 168, 123, 0.05) 50%,
+    rgba(0, 168, 123, 0.05)
+  );
+  background-size: 100% 4px;
+}
+
+/* Hero preloader — ECG sweep */
+.loader-ecg {
+  stroke-dasharray: 110 480;
+  stroke-dashoffset: 0;
+  animation: loader-sweep 1.5s linear infinite;
+}
+@keyframes loader-sweep {
+  to {
+    stroke-dashoffset: -590;
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 300;
+  color: var(--color-brand-bright);
+  animation: cursor-blink 0.85s step-end infinite;
+  text-shadow: 0 0 14px rgba(20, 207, 156, 0.55);
+}
+
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Route-change progress bar (app/loading.tsx) — indeterminate sweep shown
+   the instant a nav link is clicked, while the next route streams in. */
+.route-progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.route-progress::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-brand-bright),
+    transparent
+  );
+  box-shadow: 0 0 12px rgba(20, 207, 156, 0.55);
+  animation: route-sweep 1.05s var(--ease-premium) infinite;
+}
+@keyframes route-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(350%);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

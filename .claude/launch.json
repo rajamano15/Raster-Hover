@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "raster-website",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/admin/Downloads/Claude-Website/Raster-sample/raster-website",
+      "port": 3000
+    }
+  ]
+}
