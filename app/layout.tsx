@@ -6,6 +6,7 @@ import DotField from "@/components/backgrounds/DotField";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { SITE } from "@/data/site";
+import { asset } from "@/lib/asset";
 import "./globals.css";
 
 const baiJamjuree = localFont({
@@ -68,6 +69,18 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={baiJamjuree.variable}>
+      <head>
+        {/*
+          Favicon set lives in /public/favicon. Linked by hand rather than via
+          `metadata.icons` so the URLs stay relative to the base path instead of
+          being resolved against `metadataBase`.
+        */}
+        <link rel="icon" href={asset("/favicon/favicon.ico")} sizes="48x48" />
+        <link rel="icon" href={asset("/favicon/favicon.svg")} type="image/svg+xml" />
+        <link rel="icon" href={asset("/favicon/favicon-96x96.png")} type="image/png" sizes="96x96" />
+        <link rel="apple-touch-icon" href={asset("/favicon/apple-touch-icon.png")} sizes="180x180" />
+        <link rel="manifest" href={asset("/favicon/site.webmanifest")} />
+      </head>
       <body>
         <a
           href="#main"
