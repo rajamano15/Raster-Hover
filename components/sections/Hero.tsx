@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { EASE } from "@/lib/motion";
+import { asset } from "@/lib/asset";
 import StatsBar from "@/components/sections/StatsBar";
 
 const HEADLINE = "Revolutionizing Digital Healthcare";
@@ -73,7 +74,7 @@ function HeroPreloader({ visible }: { visible: boolean }) {
             className="absolute inset-0 bg-[radial-gradient(640px_360px_at_50%_38%,rgba(0,168,123,0.1),transparent_68%)]"
           />
           <motion.img
-            src="/logo.webp"
+            src={asset("/logo.webp")}
             alt="Raster Images"
             width={196}
             height={30}
@@ -219,7 +220,7 @@ function HologramStage({ onBaseLoad, onRevealLoad }: HologramStageProps) {
             <video
               ref={videoARef}
               className={`hologram-video ${activeVideo === "a" ? "is-active" : ""}`}
-              src="/hero/3d-hologram-animation.webm"
+              src={asset("/hero/3d-hologram-animation.webm")}
               muted
               playsInline
               preload="auto"
@@ -227,7 +228,7 @@ function HologramStage({ onBaseLoad, onRevealLoad }: HologramStageProps) {
             <video
               ref={videoBRef}
               className={`hologram-video ${activeVideo === "b" ? "is-active" : ""}`}
-              src="/hero/3d-hologram-animation.webm"
+              src={asset("/hero/3d-hologram-animation.webm")}
               muted
               playsInline
               preload="auto"
@@ -236,7 +237,7 @@ function HologramStage({ onBaseLoad, onRevealLoad }: HologramStageProps) {
         ) : null}
         <img
           className="hologram-base"
-          src="/hero/3d-hologram.webp"
+          src={asset("/hero/3d-hologram.webp")}
           alt=""
           width={1920}
           height={1080}
@@ -251,7 +252,7 @@ function HologramStage({ onBaseLoad, onRevealLoad }: HologramStageProps) {
       {/* Untinted anatomical reveal layer (spotlight masked) */}
       <div className="hologram-reveal" aria-hidden="true">
         <img
-          src="/hero/muscle-fiber.webp"
+          src={asset("/hero/muscle-fiber.webp")}
           alt=""
           width={1920}
           height={1080}

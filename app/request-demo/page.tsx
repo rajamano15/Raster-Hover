@@ -9,8 +9,7 @@ import {
 import PageHeader from "@/components/sections/PageHeader";
 import Reveal from "@/components/ui/Reveal";
 import GlassCard from "@/components/ui/GlassCard";
-import DemoForm from "@/components/forms/DemoForm";
-import { DEMO_SOLUTIONS } from "@/data/demo";
+import DemoFormWithPreset from "@/components/forms/DemoFormWithPreset";
 import { SITE } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -41,17 +40,7 @@ const STEPS = [
   },
 ];
 
-export default async function RequestDemoPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ solution?: string }>;
-}) {
-  const { solution } = await searchParams;
-  const preset =
-    solution && (DEMO_SOLUTIONS as readonly string[]).includes(solution)
-      ? solution
-      : undefined;
-
+export default function RequestDemoPage() {
   return (
     <>
       <PageHeader
@@ -130,7 +119,7 @@ export default async function RequestDemoPage({
                 Fields marked <span className="text-brand-bright">*</span> are
                 required.
               </p>
-              <DemoForm idPrefix="demo-page" presetSolution={preset} />
+              <DemoFormWithPreset idPrefix="demo-page" />
             </GlassCard>
           </Reveal>
         </div>

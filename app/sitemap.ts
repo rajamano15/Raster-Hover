@@ -1,4 +1,7 @@
 import type { MetadataRoute } from "next";
+
+// Required for `output: "export"`: metadata routes must be emitted at build time.
+export const dynamic = "force-static";
 import { SITE } from "@/data/site";
 import { ALL_PRODUCTS } from "@/data/solutions";
 

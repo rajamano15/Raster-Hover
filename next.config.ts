@@ -1,7 +1,26 @@
 import type { NextConfig } from "next";
 
+/**
+ * GitHub Pages serves project sites from a sub-path (`/<repo>/`). The deploy
+ * workflow sets NEXT_PUBLIC_BASE_PATH to that sub-path; local dev leaves it
+ * empty so the site runs at `/` as usual.
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
+  // Emit a fully static site to `out/` for GitHub Pages.
+  output: "export",
+  basePath,
+  assetPrefix: basePath || undefined,
+  // Pages has no image optimizer. The custom loader serves source files as-is
+  // and prepends the base path, which `next/image` skips for unoptimized images.
+  images: { loader: "custom", loaderFile: "./lib/image-loader.ts" },
+  // Emit `about/index.html` instead of `about.html` so plain static hosting
+  // resolves `/about/` without rewrite rules.
+  trailingSlash: true,
+
   experimental: {
     /**
      * Rewrites barrel imports (`import { Phone } from "@phosphor-icons/react"`)
